@@ -2,7 +2,6 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import IntlTelInput from 'react-intl-tel-input';
 
-import 'file?name=libphonenumber.js!./libphonenumber.js';
 import './main.css';
 
 const loadJSONP = (url, callback) => {
@@ -54,7 +53,6 @@ class DemoComponent extends React.Component {
           defaultCountry="auto"
           geoIpLookup={lookup}
           css={['intl-tel-input', 'form-control']}
-          utilsScript="assets/libphonenumber.js"
         />
         <div>Phone Number: {this.state.phone1}</div>
 
@@ -62,7 +60,6 @@ class DemoComponent extends React.Component {
           onPhoneNumberChange={this.changePhone2}
           defaultCountry={'jp'}
           css={['intl-tel-input', 'form-control']}
-          utilsScript="assets/libphonenumber.js"
         />
         <div>Phone Number: {this.state.phone2}</div>
       </div>
