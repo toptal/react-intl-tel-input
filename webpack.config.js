@@ -50,7 +50,7 @@ module.exports = {
   module: {
     loaders: [{
       test: /\.(js|jsx)$/,
-      exclude: /(node_modules|libphonenumber\.js)/,
+      exclude: /(node_modules)/,
       loader: 'react-hot!babel-loader'
     }, {
       test: /\.scss/,
