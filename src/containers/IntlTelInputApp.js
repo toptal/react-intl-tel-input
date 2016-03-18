@@ -7,6 +7,7 @@ import utils from '../components/utils';
 import _ from 'underscore.deferred';
 import Cookies from 'cookies-js';
 import '../styles/intlTelInput.scss';
+import '../libphonenumber';
 
 export default class IntlTelInputApp extends Component {
   static defaultProps = {
