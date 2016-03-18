@@ -84,15 +84,6 @@ module.exports = function (grunt) {
             ],
             dest: '<%= folders.example %>/',
             filter: 'isFile'
-          },
-          {
-            flatten: true,
-            expand: true,
-            src: [
-              '<%= folders.src %>/libphonenumber.js'
-            ],
-            dest: '<%= folders.dist %>/',
-            filter: 'isFile'
           }
         ]
       }
