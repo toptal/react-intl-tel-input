@@ -56,7 +56,7 @@ module.exports = {
     loaders: [{
       test: /\.js$/,
       exclude: /(node_modules|libphonenumber\.js)/,
-      loader: 'babel-loader',
+      loader: 'babel',
       query: { compact: false }
     }, {
       test: /\.css$/,
