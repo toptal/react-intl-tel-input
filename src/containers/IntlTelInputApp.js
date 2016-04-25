@@ -39,7 +39,7 @@ export default class IntlTelInputApp extends Component {
     // the countries at the top of the list. defaults to united states and united kingdom
     preferredCountries: ['us', 'gb'],
     // specify the path to the libphonenumber script to enable validation/formatting
-    utilsScript: '',
+    loadUtilsScript: true,
     onPhoneNumberChange: null,
     onSelectFlag: null,
     fallbackFlagInUnkownNanp: true,
@@ -63,7 +63,7 @@ export default class IntlTelInputApp extends Component {
     noCountryDataHandler: PropTypes.func,
     onlyCountries: PropTypes.arrayOf(PropTypes.string),
     preferredCountries: PropTypes.arrayOf(PropTypes.string),
-    utilsScript: PropTypes.string,
+    loadUtilsScript: PropTypes.bool,
     onPhoneNumberChange: PropTypes.func,
     onSelectFlag: PropTypes.func,
     disabled: PropTypes.bool,
@@ -327,8 +327,8 @@ export default class IntlTelInputApp extends Component {
     const val = utils.trim(number);
     const countryCode = (this.props.nationalMode) ? this.selectedCountryData.iso2 : '';
 
-    if (window.intlTelInputUtils) {
-      return window.intlTelInputUtils.formatNumberByType(val, countryCode);
+    if (this.intlTelInputUtils) {
+      return this.intlTelInputUtils.formatNumberByType(val, countryCode);
     }
     return false;
   }
@@ -377,8 +377,8 @@ export default class IntlTelInputApp extends Component {
     const val = utils.trim(number);
     const countryCode = (this.props.nationalMode) ? this.selectedCountryData.iso2 : '';
 
-    if (window.intlTelInputUtils) {
-      return window.intlTelInputUtils.isValidNumber(val, countryCode);
+    if (this.intlTelInputUtils) {
+      return this.intlTelInputUtils.isValidNumber(val, countryCode);
     }
     return false;
   }
@@ -512,7 +512,7 @@ export default class IntlTelInputApp extends Component {
 
   initRequests() {
     // if the user has specified the path to the utils script, fetch it on window.load
-    if (this.props.utilsScript) {
+    if (this.props.loadUtilsScript) {
       // if the plugin is being initialised after the window.load event has already been fired
       if (this.windowLoaded) {
         this.loadUtils();
@@ -574,31 +574,15 @@ export default class IntlTelInputApp extends Component {
   }
 
   loadUtils() {
-    if (window.intlTelInputUtils) {
+    if (this.intlTelInputUtils) {
       this.utilsScriptDeferred.resolve();
       return;
     }
 
-    const request = new XMLHttpRequest();
-    request.open('GET', this.props.utilsScript, true);
-
-    request.onload = () => {
-      if (request.status >= 200 && request.status < 400) {
-        const data = request.responseText;
-
-        if (data && !document.getElementById('intlTelInputUtils')) {
-          const oBody = document.getElementsByTagName('body')[0];
-          const oScript = document.createElement('script');
-          oScript.id = 'intlTelInputUtils';
-          oScript.text = data;
-          oBody.appendChild(oScript);
-        }
-
-        this.utilsScriptDeferred.resolve();
-      }
-    };
-
-    request.send();
+    require('bundle?name=libphonenumber!babel!../libphonenumber')((bundle) => {
+      this.intlTelInputUtils = bundle.default;
+      this.utilsScriptDeferred.resolve();
+    });
   }
 
   // prepare all of the country data, including onlyCountries and preferredCountries options
@@ -719,12 +703,12 @@ export default class IntlTelInputApp extends Component {
 
   // update the input placeholder to an example number from the currently selected country
   updatePlaceholder() {
-    if (window.intlTelInputUtils && !this.hadInitialPlaceholder &&
+    if (this.intlTelInputUtils && !this.hadInitialPlaceholder &&
       this.props.autoPlaceholder && this.selectedCountryData) {
       const iso2 = this.selectedCountryData.iso2;
-      const numberType = window.intlTelInputUtils.numberType[this.props.numberType || 'FIXED_LINE'];
+      const numberType = this.intlTelInputUtils.numberType[this.props.numberType || 'FIXED_LINE'];
       let placeholder = (iso2) ?
-        window.intlTelInputUtils.getExampleNumber(iso2, this.props.nationalMode, numberType) : '';
+        this.intlTelInputUtils.getExampleNumber(iso2, this.props.nationalMode, numberType) : '';
 
       if (typeof this.props.preprocessPlaceholder === 'function') {
         placeholder = this.props.preprocessPlaceholder(placeholder, iso2);
@@ -749,7 +733,7 @@ export default class IntlTelInputApp extends Component {
       // Update: also ignore if ctrlKey (FF on Windows/Ubuntu)
       // Update: also check that we have utils before we do any autoFormat stuff
       if (e.which >= this.keys.SPACE &&
-          !e.ctrlKey && !e.metaKey && window.intlTelInputUtils &&
+          !e.ctrlKey && !e.metaKey && this.intlTelInputUtils &&
           !this.state.telInput.readonly) {
         e.preventDefault();
         // allowed keys are just numeric keys and plus
@@ -789,7 +773,7 @@ export default class IntlTelInputApp extends Component {
     // (we've already done preventDefault in the keydown handler,
     // so it wont actually submit the form or anything).
     // ALSO: ignore keyup if readonly
-    if (this.props.autoFormat && window.intlTelInputUtils) {
+    if (this.props.autoFormat && this.intlTelInputUtils) {
       // cursorAtEnd defaults to false for bad browsers else
       // they would never get a reformat on delete
       const cursorAtEnd = (this.isGoodBrowser &&
@@ -846,21 +830,21 @@ export default class IntlTelInputApp extends Component {
   updateVal(val, format, addSuffix, preventConversion, isAllowedKey) {
     let formatted;
 
-    if (this.props.autoFormat && window.intlTelInputUtils && this.selectedCountryData) {
+    if (this.props.autoFormat && this.intlTelInputUtils && this.selectedCountryData) {
       if (typeof format === 'number' &&
-        window.intlTelInputUtils.isValidNumber(val, this.selectedCountryData.iso2)) {
+        this.intlTelInputUtils.isValidNumber(val, this.selectedCountryData.iso2)) {
         // if user specified a format, and it's a valid number, then format it accordingly
-        formatted = window.intlTelInputUtils.formatNumberByType(
+        formatted = this.intlTelInputUtils.formatNumberByType(
           val, this.selectedCountryData.iso2, format);
       } else if (!preventConversion && this.props.nationalMode &&
         val.charAt(0) === '+' &&
-        window.intlTelInputUtils.isValidNumber(val, this.selectedCountryData.iso2)) {
+        this.intlTelInputUtils.isValidNumber(val, this.selectedCountryData.iso2)) {
         // if nationalMode and we have a valid intl number, convert it to ntl
-        formatted = window.intlTelInputUtils.formatNumberByType(val,
-          this.selectedCountryData.iso2, window.intlTelInputUtils.numberFormat.NATIONAL);
+        formatted = this.intlTelInputUtils.formatNumberByType(val,
+          this.selectedCountryData.iso2, this.intlTelInputUtils.numberFormat.NATIONAL);
       } else {
         // else do the regular AsYouType formatting
-        formatted = window.intlTelInputUtils.formatNumber(val,
+        formatted = this.intlTelInputUtils.formatNumber(val,
           this.selectedCountryData.iso2, addSuffix, this.props.allowExtensions, isAllowedKey);
       }
       // ensure we dont go over maxlength. we must do this here to truncate any formatting suffix,
