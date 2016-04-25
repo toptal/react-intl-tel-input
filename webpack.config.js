@@ -49,7 +49,7 @@ module.exports = {
   },
   module: {
     loaders: [{
-      test: /\.(js|jsx)$/,
+      test: /\.js$/,
       exclude: /(node_modules|libphonenumber\.js)/,
       loader: 'react-hot!babel'
     }, {
