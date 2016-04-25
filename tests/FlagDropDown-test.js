@@ -10,19 +10,8 @@ describe('FlagDropDown', () => {
   let renderedComponent;
   let flagComponent;
   let dropDownComponent;
-  let libphonenumberUtils;
-  let xhr;
-  let requests;
 
   beforeEach('render element', () => {
-    libphonenumberUtils = fs.readFileSync('./example/assets/libphonenumber.js', 'utf8');
-    xhr = sinon.useFakeXMLHttpRequest();
-    window.intlTelInputUtils = undefined;
-    requests = [];
-    xhr.onCreate = (x) => {
-      requests.push(x);
-    };
-
     renderedComponent = ReactTestUtils.renderIntoDocument(
       <IntlTelInput css={['intl-tel-input', 'form-control phoneNumber']}
         fieldName={'telephone'}
@@ -40,10 +29,6 @@ describe('FlagDropDown', () => {
       renderedComponent,
       'country-list'
     );
-  });
-
-  afterEach('unmount component', () => {
-    xhr.restore();
   });
 
   it('Rendered', () => {
@@ -278,10 +263,6 @@ describe('FlagDropDown', () => {
   });
 
   it('preprocessPlaceholder', () => {
-    requests[0].respond(200,
-      { 'Content-Type': 'text/javascript' },
-      libphonenumberUtils);
-
     let expected = '';
     const preprocessPlaceholder = (placeholder, iso2) => {
       expected = `${placeholder},${iso2}`;
