@@ -27,7 +27,7 @@ describe('FlagDropDown', () => {
       <IntlTelInput css={['intl-tel-input', 'form-control phoneNumber']}
         fieldName={'telephone'}
         defaultCountry={'tw'}
-        utilsScript={'../example/assets/libphonenumber.js'}
+        loadUtilsScript
       />
     );
 
@@ -291,7 +291,7 @@ describe('FlagDropDown', () => {
       <IntlTelInput css={['intl-tel-input', 'form-control phoneNumber']}
         fieldName={'telephone'}
         defaultCountry={'tw'}
-        utilsScript={'../example/assets/libphonenumber.js'}
+        loadUtilsScript
         preprocessPlaceholder={preprocessPlaceholder}
       />
     );
@@ -324,7 +324,7 @@ describe('FlagDropDown', () => {
       <IntlTelInput css={['intl-tel-input', 'form-control phoneNumber']}
         fieldName={'telephone'}
         defaultCountry={'tw'}
-        utilsScript={'../example/assets/libphonenumber.js'}
+        loadUtilsScript
         onSelectFlag={onSelectFlag}
       />
     );

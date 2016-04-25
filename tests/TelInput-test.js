@@ -34,7 +34,7 @@ describe('TelInput', () => {
         fieldId={'telephone-id'}
         defaultCountry={'tw'}
         value={'0999 123 456'}
-        utilsScript={'../example/assets/libphonenumber.js'}
+        loadUtilsScript
       />
     );
 
@@ -104,7 +104,7 @@ describe('TelInput', () => {
         fieldName={'telephone'}
         defaultCountry={'zz'}
         preferredCountries={['kr', 'jp', 'tw']}
-        utilsScript={'../example/assets/libphonenumber.js'}
+        loadUtilsScript
       />
     );
 
@@ -117,7 +117,7 @@ describe('TelInput', () => {
         fieldName={'telephone'}
         preferredCountries={[]}
         defaultCountry={'zz'}
-        utilsScript={'../example/assets/libphonenumber.js'}
+        loadUtilsScript
       />
     );
 
@@ -170,7 +170,7 @@ describe('TelInput', () => {
         nationalMode={false}
         defaultCountry={'tw'}
         value={'+886999111222345'}
-        utilsScript={'../example/assets/libphonenumber.js'}
+        loadUtilsScript
       />
     );
 
@@ -202,7 +202,7 @@ describe('TelInput', () => {
         fieldName={'telephone'}
         nationalMode={false}
         defaultCountry={'tw'}
-        utilsScript={'../example/assets/libphonenumber.js'}
+        loadUtilsScript
       />
     );
 
@@ -252,7 +252,7 @@ describe('TelInput', () => {
       <IntlTelInput css={['intl-tel-input', 'form-control phoneNumber']}
         fieldName={'telephone'}
         defaultCountry={'tw'}
-        utilsScript={'../example/assets/libphonenumber.js'}
+        loadUtilsScript
         onPhoneNumberChange={onPhoneNumberChange}
       />
     );
