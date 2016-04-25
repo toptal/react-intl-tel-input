@@ -579,7 +579,7 @@ export default class IntlTelInputApp extends Component {
       return;
     }
 
-    require('bundle?name=libphonenumber!babel!../libphonenumber')((bundle) => {
+    require('bundle?lazy&name=libphonenumber!babel!../libphonenumber')((bundle) => {
       this.intlTelInputUtils = bundle.default;
       this.utilsScriptDeferred.resolve();
     });
