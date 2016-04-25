@@ -39,7 +39,7 @@ export default class IntlTelInputApp extends Component {
     // the countries at the top of the list. defaults to united states and united kingdom
     preferredCountries: ['us', 'gb'],
     // specify the path to the libphonenumber script to enable validation/formatting
-    loadUtilsScript: true,
+    loadUtilsScript: false,
     onPhoneNumberChange: null,
     onSelectFlag: null,
     fallbackFlagInUnkownNanp: true,
