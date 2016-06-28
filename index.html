@@ -86,7 +86,7 @@ const loadJSONP = (url, callback) => {
 };
 
 const lookup = (callback) => {
-  loadJSONP('https://ipinfo.io', 'sendBack');
+  loadJSONP('http://ipinfo.io', 'sendBack');
   window.sendBack = (resp) => {
     const countryCode = (resp &amp;&amp; resp.country) ? resp.country : '';
     callback(countryCode);
